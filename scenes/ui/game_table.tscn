@@ -1,0 +1,181 @@
+[gd_scene load_steps=3 format=3 uid="uid://chs8w3vxplktm"]
+
+[ext_resource type="Script" path="res://scripts/game/blackjack_game.gd" id="1_bjgame"]
+[ext_resource type="Script" path="res://scripts/ui/game_table.gd" id="2_table"]
+
+[node name="GameTable" type="Node2D"]
+script = ExtResource("2_table")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 640.0
+offset_bottom = 480.0
+color = Color(0.1, 0.35, 0.15, 1)
+
+[node name="TableFelt" type="ColorRect" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 620.0
+offset_bottom = 460.0
+color = Color(0.15, 0.45, 0.2, 1)
+
+[node name="BlackjackGame" type="Node" parent="."]
+script = ExtResource("1_bjgame")
+
+[node name="PlayerCards" type="Node2D" parent="."]
+position = Vector2(0, 340)
+
+[node name="DealerCards" type="Node2D" parent="."]
+position = Vector2(0, 100)
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="BalanceDisplay" type="Label" parent="UI"]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 200.0
+offset_bottom = 30.0
+text = "Balance: $1000"
+
+[node name="BetDisplay" type="Label" parent="UI"]
+offset_left = 10.0
+offset_top = 35.0
+offset_right = 200.0
+offset_bottom = 55.0
+text = "Bet: $0"
+
+[node name="MessageLabel" type="Label" parent="UI"]
+offset_left = 220.0
+offset_top = 220.0
+offset_right = 420.0
+offset_bottom = 260.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PlayerValueLabel" type="Label" parent="UI"]
+offset_left = 540.0
+offset_top = 340.0
+offset_right = 620.0
+offset_bottom = 370.0
+horizontal_alignment = 1
+
+[node name="DealerValueLabel" type="Label" parent="UI"]
+offset_left = 540.0
+offset_top = 100.0
+offset_right = 620.0
+offset_bottom = 130.0
+horizontal_alignment = 1
+
+[node name="ActionButtons" type="HBoxContainer" parent="UI"]
+offset_left = 120.0
+offset_top = 420.0
+offset_right = 520.0
+offset_bottom = 470.0
+
+[node name="HitButton" type="Button" parent="UI/ActionButtons"]
+visible = false
+custom_minimum_size = Vector2(80, 40)
+text = "Hit"
+
+[node name="StandButton" type="Button" parent="UI/ActionButtons"]
+visible = false
+custom_minimum_size = Vector2(80, 40)
+text = "Stand"
+
+[node name="DoubleButton" type="Button" parent="UI/ActionButtons"]
+visible = false
+custom_minimum_size = Vector2(80, 40)
+text = "Double"
+
+[node name="SplitButton" type="Button" parent="UI/ActionButtons"]
+visible = false
+custom_minimum_size = Vector2(80, 40)
+text = "Split"
+
+[node name="SurrenderButton" type="Button" parent="UI/ActionButtons"]
+visible = false
+custom_minimum_size = Vector2(80, 40)
+text = "Surrender"
+
+[node name="BetContainer" type="VBoxContainer" parent="UI"]
+offset_left = 120.0
+offset_top = 300.0
+offset_right = 520.0
+offset_bottom = 450.0
+
+[node name="CurrentBetLabel" type="Label" parent="UI/BetContainer"]
+layout_mode = 2
+text = "Bet: $0"
+horizontal_alignment = 1
+
+[node name="ChipButtons" type="HBoxContainer" parent="UI/BetContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ButtonContainer" type="HBoxContainer" parent="UI/BetContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="ClearBetButton" type="Button" parent="UI/BetContainer/ButtonContainer"]
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+text = "Clear"
+
+[node name="DealButton" type="Button" parent="UI/BetContainer/ButtonContainer"]
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+text = "Deal"
+
+[node name="InsuranceDialog" type="Control" parent="UI"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -60.0
+offset_right = 100.0
+offset_bottom = 60.0
+
+[node name="Panel" type="Panel" parent="UI/InsuranceDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBox" type="VBoxContainer" parent="UI/InsuranceDialog/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+alignment = 1
+
+[node name="Label" type="Label" parent="UI/InsuranceDialog/Panel/VBox"]
+layout_mode = 2
+text = "Take Insurance?"
+horizontal_alignment = 1
+
+[node name="HBox" type="HBoxContainer" parent="UI/InsuranceDialog/Panel/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="YesButton" type="Button" parent="UI/InsuranceDialog/Panel/VBox/HBox"]
+custom_minimum_size = Vector2(60, 30)
+layout_mode = 2
+text = "Yes"
+
+[node name="NoButton" type="Button" parent="UI/InsuranceDialog/Panel/VBox/HBox"]
+custom_minimum_size = Vector2(60, 30)
+layout_mode = 2
+text = "No"
+
+[node name="BackButton" type="Button" parent="UI"]
+offset_left = 540.0
+offset_top = 10.0
+offset_right = 630.0
+offset_bottom = 40.0
+text = "Menu"
