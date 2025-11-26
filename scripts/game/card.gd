@@ -43,9 +43,16 @@ func setup(card_rank: String, card_suit: String, face_up: bool = false) -> void:
 	
 	_load_card_textures()
 	_update_visibility()
+	_apply_scale()
+
+func _apply_scale() -> void:
+	# Scale cards to fit the game table (original cards are 655x930)
+	if front_sprite.texture:
+		var original_width: float = front_sprite.texture.get_width()
+		card_scale = target_card_width / original_width
+		scale = Vector2(card_scale, card_scale)
 
 func _load_card_textures() -> void:
-	# Convert suit to your asset naming: Hearts, Clovers (clubs), Pikes (spades), Tiles (diamonds)
 	var suit_map: Dictionary = {
 		"hearts": "Hearts",
 		"clubs": "Clovers",
@@ -99,14 +106,17 @@ func flip(to_face_up: bool = true) -> void:
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.set_trans(Tween.TRANS_SINE)
 	
+	# Store original scale to restore after flip
+	var original_scale_x: float = scale.x
+	
 	# First half: scale X to 0 (card appears to turn sideways)
 	tween.tween_property(self, "scale:x", 0.0, flip_duration / 2.0)
 	
 	# At midpoint, swap visibility
 	tween.tween_callback(_swap_face.bind(to_face_up))
 	
-	# Second half: scale X back to 1
-	tween.tween_property(self, "scale:x", 1.0, flip_duration / 2.0)
+	# Second half: scale X back to original (not 1.0!)
+	tween.tween_property(self, "scale:x", original_scale_x, flip_duration / 2.0)
 	
 	tween.tween_callback(func(): flip_completed.emit())
 
@@ -165,6 +175,6 @@ func get_card_data() -> Dictionary:
 		"value": card_value
 	}
 
-func to_string() -> String:
+func _to_string() -> String:
 	return "%s of %s" % [rank, suit]
 #endregion

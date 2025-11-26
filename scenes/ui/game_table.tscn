@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://chs8w3vxplktm"]
+[gd_scene load_steps=4 format=3 uid="uid://chs8w3vxplktm"]
 
 [ext_resource type="Script" path="res://scripts/game/blackjack_game.gd" id="1_bjgame"]
 [ext_resource type="Script" path="res://scripts/ui/game_table.gd" id="2_table"]
+[ext_resource type="Theme" uid="uid://cxpixeltheme01" path="res://resources/themes/pixel_theme.tres" id="3_theme"]
 
 [node name="GameTable" type="Node2D"]
 script = ExtResource("2_table")
@@ -9,14 +10,14 @@ script = ExtResource("2_table")
 [node name="Background" type="ColorRect" parent="."]
 offset_right = 640.0
 offset_bottom = 480.0
-color = Color(0.1, 0.35, 0.15, 1)
+color = Color(0.08, 0.25, 0.12, 1)
 
 [node name="TableFelt" type="ColorRect" parent="."]
 offset_left = 20.0
 offset_top = 20.0
 offset_right = 620.0
 offset_bottom = 460.0
-color = Color(0.15, 0.45, 0.2, 1)
+color = Color(0.12, 0.38, 0.18, 1)
 
 [node name="BlackjackGame" type="Node" parent="."]
 script = ExtResource("1_bjgame")
@@ -29,103 +30,117 @@ position = Vector2(0, 100)
 
 [node name="UI" type="CanvasLayer" parent="."]
 
-[node name="BalanceDisplay" type="Label" parent="UI"]
+[node name="ThemeContainer" type="Control" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+
+[node name="BalanceDisplay" type="Label" parent="UI/ThemeContainer"]
 offset_left = 10.0
 offset_top = 10.0
 offset_right = 200.0
 offset_bottom = 30.0
 text = "Balance: $1000"
 
-[node name="BetDisplay" type="Label" parent="UI"]
+[node name="BetDisplay" type="Label" parent="UI/ThemeContainer"]
 offset_left = 10.0
 offset_top = 35.0
 offset_right = 200.0
 offset_bottom = 55.0
 text = "Bet: $0"
 
-[node name="MessageLabel" type="Label" parent="UI"]
+[node name="MessageLabel" type="Label" parent="UI/ThemeContainer"]
 offset_left = 220.0
 offset_top = 220.0
 offset_right = 420.0
 offset_bottom = 260.0
+theme_override_font_sizes/font_size = 20
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PlayerValueLabel" type="Label" parent="UI"]
+[node name="PlayerValueLabel" type="Label" parent="UI/ThemeContainer"]
 offset_left = 540.0
 offset_top = 340.0
 offset_right = 620.0
 offset_bottom = 370.0
+theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
 
-[node name="DealerValueLabel" type="Label" parent="UI"]
+[node name="DealerValueLabel" type="Label" parent="UI/ThemeContainer"]
 offset_left = 540.0
 offset_top = 100.0
 offset_right = 620.0
 offset_bottom = 130.0
+theme_override_font_sizes/font_size = 18
 horizontal_alignment = 1
 
-[node name="ActionButtons" type="HBoxContainer" parent="UI"]
-offset_left = 120.0
+[node name="ActionButtons" type="HBoxContainer" parent="UI/ThemeContainer"]
+offset_left = 100.0
 offset_top = 420.0
-offset_right = 520.0
+offset_right = 540.0
 offset_bottom = 470.0
+alignment = 1
 
-[node name="HitButton" type="Button" parent="UI/ActionButtons"]
+[node name="HitButton" type="Button" parent="UI/ThemeContainer/ActionButtons"]
 visible = false
-custom_minimum_size = Vector2(80, 40)
+custom_minimum_size = Vector2(75, 35)
 text = "Hit"
 
-[node name="StandButton" type="Button" parent="UI/ActionButtons"]
+[node name="StandButton" type="Button" parent="UI/ThemeContainer/ActionButtons"]
 visible = false
-custom_minimum_size = Vector2(80, 40)
+custom_minimum_size = Vector2(75, 35)
 text = "Stand"
 
-[node name="DoubleButton" type="Button" parent="UI/ActionButtons"]
+[node name="DoubleButton" type="Button" parent="UI/ThemeContainer/ActionButtons"]
 visible = false
-custom_minimum_size = Vector2(80, 40)
+custom_minimum_size = Vector2(75, 35)
 text = "Double"
 
-[node name="SplitButton" type="Button" parent="UI/ActionButtons"]
+[node name="SplitButton" type="Button" parent="UI/ThemeContainer/ActionButtons"]
 visible = false
-custom_minimum_size = Vector2(80, 40)
+custom_minimum_size = Vector2(75, 35)
 text = "Split"
 
-[node name="SurrenderButton" type="Button" parent="UI/ActionButtons"]
+[node name="SurrenderButton" type="Button" parent="UI/ThemeContainer/ActionButtons"]
 visible = false
-custom_minimum_size = Vector2(80, 40)
+custom_minimum_size = Vector2(85, 35)
 text = "Surrender"
 
-[node name="BetContainer" type="VBoxContainer" parent="UI"]
+[node name="BetContainer" type="VBoxContainer" parent="UI/ThemeContainer"]
 offset_left = 120.0
 offset_top = 300.0
 offset_right = 520.0
 offset_bottom = 450.0
+alignment = 1
 
-[node name="CurrentBetLabel" type="Label" parent="UI/BetContainer"]
+[node name="CurrentBetLabel" type="Label" parent="UI/ThemeContainer/BetContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 18
 text = "Bet: $0"
 horizontal_alignment = 1
 
-[node name="ChipButtons" type="HBoxContainer" parent="UI/BetContainer"]
+[node name="ChipButtons" type="HBoxContainer" parent="UI/ThemeContainer/BetContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="ButtonContainer" type="HBoxContainer" parent="UI/BetContainer"]
+[node name="ButtonContainer" type="HBoxContainer" parent="UI/ThemeContainer/BetContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="ClearBetButton" type="Button" parent="UI/BetContainer/ButtonContainer"]
-custom_minimum_size = Vector2(80, 40)
+[node name="ClearBetButton" type="Button" parent="UI/ThemeContainer/BetContainer/ButtonContainer"]
+custom_minimum_size = Vector2(80, 35)
 layout_mode = 2
 text = "Clear"
 
-[node name="DealButton" type="Button" parent="UI/BetContainer/ButtonContainer"]
-custom_minimum_size = Vector2(80, 40)
+[node name="DealButton" type="Button" parent="UI/ThemeContainer/BetContainer/ButtonContainer"]
+custom_minimum_size = Vector2(80, 35)
 layout_mode = 2
 text = "Deal"
 
-[node name="InsuranceDialog" type="Control" parent="UI"]
+[node name="InsuranceDialog" type="Control" parent="UI/ThemeContainer"]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -137,13 +152,13 @@ offset_top = -60.0
 offset_right = 100.0
 offset_bottom = 60.0
 
-[node name="Panel" type="Panel" parent="UI/InsuranceDialog"]
+[node name="Panel" type="Panel" parent="UI/ThemeContainer/InsuranceDialog"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="VBox" type="VBoxContainer" parent="UI/InsuranceDialog/Panel"]
+[node name="VBox" type="VBoxContainer" parent="UI/ThemeContainer/InsuranceDialog/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -154,28 +169,28 @@ offset_right = -10.0
 offset_bottom = -10.0
 alignment = 1
 
-[node name="Label" type="Label" parent="UI/InsuranceDialog/Panel/VBox"]
+[node name="Label" type="Label" parent="UI/ThemeContainer/InsuranceDialog/Panel/VBox"]
 layout_mode = 2
 text = "Take Insurance?"
 horizontal_alignment = 1
 
-[node name="HBox" type="HBoxContainer" parent="UI/InsuranceDialog/Panel/VBox"]
+[node name="HBox" type="HBoxContainer" parent="UI/ThemeContainer/InsuranceDialog/Panel/VBox"]
 layout_mode = 2
 alignment = 1
 
-[node name="YesButton" type="Button" parent="UI/InsuranceDialog/Panel/VBox/HBox"]
+[node name="YesButton" type="Button" parent="UI/ThemeContainer/InsuranceDialog/Panel/VBox/HBox"]
 custom_minimum_size = Vector2(60, 30)
 layout_mode = 2
 text = "Yes"
 
-[node name="NoButton" type="Button" parent="UI/InsuranceDialog/Panel/VBox/HBox"]
+[node name="NoButton" type="Button" parent="UI/ThemeContainer/InsuranceDialog/Panel/VBox/HBox"]
 custom_minimum_size = Vector2(60, 30)
 layout_mode = 2
 text = "No"
 
-[node name="BackButton" type="Button" parent="UI"]
+[node name="BackButton" type="Button" parent="UI/ThemeContainer"]
 offset_left = 540.0
 offset_top = 10.0
-offset_right = 630.0
+offset_right = 625.0
 offset_bottom = 40.0
 text = "Menu"

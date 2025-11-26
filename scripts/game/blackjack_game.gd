@@ -8,6 +8,7 @@ signal game_started
 signal cards_dealt
 signal player_turn_started
 signal dealer_turn_started
+signal dealer_card_drawn(card: Dictionary)
 signal hand_resolved(result: String, payout: int)
 signal round_ended
 signal insurance_offered
@@ -174,16 +175,19 @@ func hit() -> Dictionary:
 	var new_card: Dictionary = deck.draw()
 	current_hand.add_card(new_card)
 	
-	# Check for bust
-	if current_hand.is_bust():
-		await get_tree().create_timer(0.3).timeout
-		_on_hand_complete()
-	# Auto-stand on 21
-	elif current_hand.is_21():
-		await get_tree().create_timer(0.3).timeout
-		stand()
+	# Check for bust or 21 after a delay (handled by caller)
+	# The game_table.gd will check the state after animation
 	
 	return new_card
+
+func check_player_hand_state() -> void:
+	# Called after card animation completes
+	var current_hand: Hand = player_hands[active_hand_index]
+	
+	if current_hand.is_bust():
+		_on_hand_complete()
+	elif current_hand.is_21():
+		stand()
 
 func stand() -> void:
 	if current_state != GameState.PLAYER_TURN and current_state != GameState.SPLIT_TURN:
@@ -219,12 +223,14 @@ func double_down() -> Dictionary:
 	var new_card: Dictionary = deck.draw()
 	current_hand.add_card(new_card)
 	
-	# Automatically stand after double down
-	await get_tree().create_timer(0.3).timeout
+	# Mark for standing (will be completed by caller after animation)
 	current_hand.is_standing = true
-	_on_hand_complete()
 	
 	return new_card
+
+func complete_double_down() -> void:
+	# Called after card animation completes for double down
+	_on_hand_complete()
 
 func split() -> bool:
 	if current_state != GameState.PLAYER_TURN and current_state != GameState.SPLIT_TURN:
@@ -322,6 +328,7 @@ func _dealer_play() -> void:
 		await get_tree().create_timer(DEALER_CARD_DELAY).timeout
 		var new_card: Dictionary = deck.draw()
 		dealer_hand.add_card(new_card)
+		dealer_card_drawn.emit(new_card)
 	
 	# Some casinos have dealer hit on soft 17 - we use stand on all 17
 	await get_tree().create_timer(0.3).timeout

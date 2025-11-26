@@ -221,6 +221,14 @@ func process_surrender() -> int:
 	SaveManager.save_game()
 	return refund
 
+func check_bankruptcy() -> bool:
+	var min_possible_bet: int = TABLE_CONFIG[TableTier.BEGINNER].min_bet
+	if player_balance < min_possible_bet:
+		player_balance = 1000 # Reset to default
+		SaveManager.save_game()
+		return true
+	return false
+
 func _reset_bets() -> void:
 	current_bet = 0
 	insurance_bet = 0
