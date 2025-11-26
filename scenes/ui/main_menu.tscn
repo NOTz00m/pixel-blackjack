@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bp4l8k2nmfqxk"]
+[gd_scene load_steps=4 format=3 uid="uid://bp4l8k2nmfqxk"]
 
 [ext_resource type="Script" uid="uid://b5yq3pxgedqag" path="res://scripts/ui/main_menu.gd" id="1_menu"]
 [ext_resource type="Theme" uid="uid://cs4wtbooeyalg" path="res://resources/themes/pixel_theme.tres" id="2_theme"]
+[ext_resource type="FontFile" uid="uid://dsx11w01xiw4k" path="res://assets/fonts/superstar_memesbruh03.ttf" id="3_1g8jr"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -32,6 +33,7 @@ offset_top = 50.0
 offset_right = 150.0
 offset_bottom = 100.0
 grow_horizontal = 2
+theme_override_fonts/font = ExtResource("3_1g8jr")
 theme_override_font_sizes/font_size = 32
 text = "PIXEL BLACKJACK"
 horizontal_alignment = 1
@@ -46,6 +48,7 @@ offset_top = 110.0
 offset_right = 100.0
 offset_bottom = 140.0
 grow_horizontal = 2
+theme_override_fonts/font = ExtResource("3_1g8jr")
 text = "Balance: $1000"
 horizontal_alignment = 1
 
@@ -66,21 +69,25 @@ grow_vertical = 2
 [node name="PlayButton" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_1g8jr")
 text = "Play"
 
 [node name="TableSelectButton" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_1g8jr")
 text = "Select Table"
 
 [node name="StatsButton" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_1g8jr")
 text = "Statistics"
 
 [node name="QuitButton" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_1g8jr")
 text = "Quit"
 
 [node name="TableSelectPopup" type="Control" parent="."]
@@ -112,6 +119,7 @@ offset_left = 10.0
 offset_top = 10.0
 offset_right = 340.0
 offset_bottom = 40.0
+theme_override_fonts/font = ExtResource("3_1g8jr")
 text = "Select Table"
 horizontal_alignment = 1
 
@@ -167,5 +175,6 @@ offset_right = 150.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_fonts/font = ExtResource("3_1g8jr")
 text = "Current Table: Beginner ($10-$100)"
 horizontal_alignment = 1

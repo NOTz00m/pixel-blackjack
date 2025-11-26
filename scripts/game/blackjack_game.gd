@@ -274,8 +274,8 @@ func surrender() -> bool:
 	var current_hand: Hand = player_hands[active_hand_index]
 	current_hand.is_surrendered = true
 	
-	GameManager.process_surrender()
-	hand_resolved.emit("surrender", GameManager.current_bet / 2)
+	var refund: int = GameManager.process_surrender()
+	hand_resolved.emit("surrender", refund)
 	
 	_end_round()
 	return true
@@ -296,8 +296,6 @@ func decline_insurance() -> void:
 
 #region Hand Resolution
 func _on_hand_complete() -> void:
-	var current_hand: Hand = player_hands[active_hand_index]
-	
 	# Check if there are more hands to play (splits)
 	if active_hand_index < player_hands.size() - 1:
 		active_hand_index += 1

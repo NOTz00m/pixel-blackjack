@@ -125,7 +125,7 @@ func place_bet(amount: int) -> bool:
 	return true
 
 func place_insurance() -> bool:
-	var insurance_amount: int = current_bet / 2
+	var insurance_amount: int = int(current_bet * 0.5)
 	if insurance_amount > player_balance:
 		return false
 	
@@ -169,9 +169,9 @@ func get_table_config(tier: TableTier = current_table) -> Dictionary:
 #endregion
 
 #region Game Results
-func process_win(is_blackjack: bool = false) -> int:
+func process_win(player_has_blackjack: bool = false) -> int:
 	var payout: int
-	if is_blackjack:
+	if player_has_blackjack:
 		payout = int(current_bet * BLACKJACK_PAYOUT) + current_bet
 		stats.blackjacks += 1
 	else:
@@ -212,7 +212,7 @@ func process_insurance_loss() -> void:
 	insurance_bet = 0
 
 func process_surrender() -> int:
-	var refund: int = current_bet / 2
+	var refund: int = int(current_bet * 0.5)
 	player_balance += refund
 	stats.games_lost += 1
 	stats.games_played += 1
@@ -235,10 +235,10 @@ func _reset_bets() -> void:
 #endregion
 
 #region Card Utilities
-static func get_card_value(rank: String) -> int:
+func get_card_value(rank: String) -> int:
 	return CARD_VALUES.get(rank.to_lower(), 0)
 
-static func calculate_hand_value(cards: Array) -> int:
+func calculate_hand_value(cards: Array) -> int:
 	var total: int = 0
 	var aces: int = 0
 	
@@ -255,13 +255,13 @@ static func calculate_hand_value(cards: Array) -> int:
 	
 	return total
 
-static func is_blackjack(cards: Array) -> bool:
+func is_blackjack(cards: Array) -> bool:
 	return cards.size() == 2 and calculate_hand_value(cards) == 21
 
-static func is_bust(cards: Array) -> bool:
+func is_bust(cards: Array) -> bool:
 	return calculate_hand_value(cards) > 21
 
-static func is_soft_hand(cards: Array) -> bool:
+func is_soft_hand(cards: Array) -> bool:
 	# A soft hand contains an ace counted as 11
 	var total: int = 0
 	var aces: int = 0
@@ -275,7 +275,7 @@ static func is_soft_hand(cards: Array) -> bool:
 	# If we have aces and aren't busting, it's soft
 	return aces > 0 and total <= 21
 
-static func can_split_hand(cards: Array) -> bool:
+func can_split_hand(cards: Array) -> bool:
 	if cards.size() != 2:
 		return false
 	return get_card_value(cards[0].rank) == get_card_value(cards[1].rank)
