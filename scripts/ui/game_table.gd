@@ -19,33 +19,33 @@ const ANIMATION_SPEED: float = 0.3
 @onready var blackjack_game: BlackjackGame = $BlackjackGame
 @onready var player_cards_container: Node2D = $PlayerCards
 @onready var dealer_cards_container: Node2D = $DealerCards
-@onready var bet_display: Label = $UI/BetDisplay
-@onready var balance_display: Label = $UI/BalanceDisplay
-@onready var message_label: Label = $UI/MessageLabel
-@onready var player_value_label: Label = $UI/PlayerValueLabel
-@onready var dealer_value_label: Label = $UI/DealerValueLabel
+@onready var bet_display: Label = $UI/ThemeContainer/BetDisplay
+@onready var balance_display: Label = $UI/ThemeContainer/BalanceDisplay
+@onready var message_label: Label = $UI/ThemeContainer/MessageLabel
+@onready var player_value_label: Label = $UI/ThemeContainer/PlayerValueLabel
+@onready var dealer_value_label: Label = $UI/ThemeContainer/DealerValueLabel
 
 # Action buttons
-@onready var hit_button: Button = $UI/ActionButtons/HitButton
-@onready var stand_button: Button = $UI/ActionButtons/StandButton
-@onready var double_button: Button = $UI/ActionButtons/DoubleButton
-@onready var split_button: Button = $UI/ActionButtons/SplitButton
-@onready var surrender_button: Button = $UI/ActionButtons/SurrenderButton
+@onready var hit_button: Button = $UI/ThemeContainer/ActionButtons/HitButton
+@onready var stand_button: Button = $UI/ThemeContainer/ActionButtons/StandButton
+@onready var double_button: Button = $UI/ThemeContainer/ActionButtons/DoubleButton
+@onready var split_button: Button = $UI/ThemeContainer/ActionButtons/SplitButton
+@onready var surrender_button: Button = $UI/ThemeContainer/ActionButtons/SurrenderButton
 
 # Betting controls
-@onready var bet_container: Control = $UI/BetContainer
-@onready var chip_buttons: HBoxContainer = $UI/BetContainer/ChipButtons
-@onready var deal_button: Button = $UI/BetContainer/ButtonContainer/DealButton
-@onready var clear_bet_button: Button = $UI/BetContainer/ButtonContainer/ClearBetButton
-@onready var current_bet_label: Label = $UI/BetContainer/CurrentBetLabel
+@onready var bet_container: Control = $UI/ThemeContainer/BetContainer
+@onready var chip_buttons: HBoxContainer = $UI/ThemeContainer/BetContainer/ChipButtons
+@onready var deal_button: Button = $UI/ThemeContainer/BetContainer/ButtonContainer/DealButton
+@onready var clear_bet_button: Button = $UI/ThemeContainer/BetContainer/ButtonContainer/ClearBetButton
+@onready var current_bet_label: Label = $UI/ThemeContainer/BetContainer/CurrentBetLabel
 
 # Insurance dialog
-@onready var insurance_dialog: Control = $UI/InsuranceDialog
-@onready var insurance_yes_button: Button = $UI/InsuranceDialog/Panel/VBox/HBox/YesButton
-@onready var insurance_no_button: Button = $UI/InsuranceDialog/Panel/VBox/HBox/NoButton
+@onready var insurance_dialog: Control = $UI/ThemeContainer/InsuranceDialog
+@onready var insurance_yes_button: Button = $UI/ThemeContainer/InsuranceDialog/Panel/VBox/HBox/YesButton
+@onready var insurance_no_button: Button = $UI/ThemeContainer/InsuranceDialog/Panel/VBox/HBox/NoButton
 
 # Back button
-@onready var back_button: Button = $UI/BackButton
+@onready var back_button: Button = $UI/ThemeContainer/BackButton
 #endregion
 
 #region State
@@ -69,6 +69,7 @@ func _connect_signals() -> void:
 	blackjack_game.cards_dealt.connect(_on_cards_dealt)
 	blackjack_game.player_turn_started.connect(_on_player_turn_started)
 	blackjack_game.dealer_turn_started.connect(_on_dealer_turn_started)
+	blackjack_game.dealer_card_drawn.connect(_on_dealer_card_drawn)
 	blackjack_game.hand_resolved.connect(_on_hand_resolved)
 	blackjack_game.round_ended.connect(_on_round_ended)
 	blackjack_game.insurance_offered.connect(_on_insurance_offered)
@@ -98,6 +99,7 @@ func _connect_signals() -> void:
 
 #region Betting Phase
 func _show_betting_phase() -> void:
+	_clear_cards()
 	bet_container.visible = true
 	_hide_action_buttons()
 	insurance_dialog.visible = false
@@ -106,7 +108,7 @@ func _show_betting_phase() -> void:
 	_update_deal_button()
 
 func _setup_chip_buttons() -> void:
-	var chip_values: Array[int] = [1, 5, 10, 25, 50, 100, 500]
+	var chip_values: Array[int] = [5, 10, 25, 50, 100]
 	
 	for child in chip_buttons.get_children():
 		child.queue_free()
@@ -114,7 +116,7 @@ func _setup_chip_buttons() -> void:
 	for value: int in chip_values:
 		var button: Button = Button.new()
 		button.text = "$%d" % value
-		button.custom_minimum_size = Vector2(60, 40)
+		button.custom_minimum_size = Vector2(55, 35)
 		button.pressed.connect(_on_chip_pressed.bind(value))
 		chip_buttons.add_child(button)
 
@@ -237,15 +239,11 @@ func _on_dealer_turn_started() -> void:
 		await get_tree().create_timer(0.5).timeout
 	
 	_update_value_labels()
-	
-	# Watch dealer draw cards
-	var initial_dealer_cards: int = dealer_card_nodes.size()
-	while blackjack_game.dealer_hand.cards.size() > dealer_card_nodes.size():
-		var card_index: int = dealer_card_nodes.size()
-		var card_data: Dictionary = blackjack_game.dealer_hand.cards[card_index]
-		await _create_and_deal_card(card_data, false, true, card_index)
-		_update_value_labels()
-		await get_tree().create_timer(0.5).timeout
+
+func _on_dealer_card_drawn(card_data: Dictionary) -> void:
+	var card_index: int = dealer_card_nodes.size()
+	await _create_and_deal_card(card_data, false, true, card_index)
+	_update_value_labels()
 
 func _on_hand_resolved(result: String, payout: int) -> void:
 	match result:
@@ -269,6 +267,11 @@ func _on_hand_resolved(result: String, payout: int) -> void:
 func _on_round_ended() -> void:
 	_hide_action_buttons()
 	_update_displays()
+	
+	# Check for bankruptcy
+	if GameManager.check_bankruptcy():
+		message_label.text = "Bankrupt! Resetting to $1000"
+		_update_displays()
 	
 	# Show "New Game" prompt after delay
 	await get_tree().create_timer(2.0).timeout
@@ -302,9 +305,15 @@ func _on_hit_pressed() -> void:
 		return
 	
 	# Add new card to display
+	is_animating = true
 	var card_index: int = player_card_nodes.size()
 	await _create_and_deal_card(new_card, true, true, card_index)
 	_update_value_labels()
+	is_animating = false
+	
+	# Check for bust or 21 after animation
+	await get_tree().create_timer(0.2).timeout
+	blackjack_game.check_player_hand_state()
 	_update_button_states()
 
 func _on_stand_pressed() -> void:
@@ -321,9 +330,15 @@ func _on_double_pressed() -> void:
 		return
 	
 	_update_displays()
+	is_animating = true
 	var card_index: int = player_card_nodes.size()
 	await _create_and_deal_card(new_card, true, true, card_index)
 	_update_value_labels()
+	is_animating = false
+	
+	# Complete double down after animation
+	await get_tree().create_timer(0.2).timeout
+	blackjack_game.complete_double_down()
 
 func _on_split_pressed() -> void:
 	if is_animating:

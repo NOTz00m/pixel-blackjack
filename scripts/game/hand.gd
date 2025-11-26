@@ -72,7 +72,7 @@ func split() -> Hand:
 #endregion
 
 #region Display
-func to_string() -> String:
+func _to_string() -> String:
 	var card_strings: Array[String] = []
 	for card: Dictionary in cards:
 		card_strings.append("%s of %s" % [card.rank, card.suit])

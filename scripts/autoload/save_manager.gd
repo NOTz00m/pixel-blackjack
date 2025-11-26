@@ -7,6 +7,10 @@ const SAVE_FILE_PATH: String = "user://blackjack_save.json"
 
 #region Save/Load Functions
 func save_game() -> void:
+	# Optional: Disable saving on web if you want a fresh start every time
+	if OS.has_feature("web"):
+		return
+
 	var save_data: Dictionary = {
 		"version": 1,
 		"timestamp": Time.get_datetime_string_from_system(),
