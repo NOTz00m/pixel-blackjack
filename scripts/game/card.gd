@@ -60,7 +60,7 @@ func _load_card_textures() -> void:
 		"diamonds": "Tiles"
 	}
 	
-	# Convert rank to your asset naming: A for ace, face cards capitalized
+	# Convert rank to asset naming: A for ace, face cards capitalized
 	var rank_map: Dictionary = {
 		"ace": "A",
 		"jack": "Jack",
@@ -82,7 +82,7 @@ func _load_card_textures() -> void:
 	else:
 		push_warning("Card texture not found: " + front_path)
 	
-	# Load back texture - use the g3771.png which appears to be a card back
+	# Load back texture
 	var back_path: String = "res://assets/playing_cards/%s/g3771.png" % card_style
 	if ResourceLoader.exists(back_path):
 		back_sprite.texture = load(back_path)

@@ -4,7 +4,7 @@ This document explains the card image format used in the Pixel Blackjack game.
 
 ## Current Asset Structure
 
-Your card images are located at:
+Card images are located at:
 ```
 res://assets/playing_cards/black/   <- Black-styled cards (currently used)
 res://assets/playing_cards/white/   <- White-styled cards (alternative)
@@ -57,19 +57,9 @@ var card_style: String = "white"
 
 ## Card Dimensions
 
-Your cards are 655x930 pixels. The game automatically scales them to fit the table (target width: 60 pixels by default).
+The game automatically scale cards to fit the table (target width: 60 pixels by default).
 
 To adjust card size, modify in `scripts/game/card.gd`:
 ```gdscript
 @export var target_card_width: float = 60.0  # Change this value
 ```
-
-## Import Settings
-
-For pixel-perfect rendering, ensure your card images use these import settings in Godot:
-1. Select card images in FileSystem
-2. Go to Import tab
-3. Set Filter to "Nearest"
-4. Click "Reimport"
-
-The project's `.import` files should already have this configured.

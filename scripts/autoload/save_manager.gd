@@ -7,7 +7,7 @@ const SAVE_FILE_PATH: String = "user://blackjack_save.json"
 
 #region Save/Load Functions
 func save_game() -> void:
-	# Optional: Disable saving on web if you want a fresh start every time
+	# Optional: Disable saving on web
 	if OS.has_feature("web"):
 		return
 

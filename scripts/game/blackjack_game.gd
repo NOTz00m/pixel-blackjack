@@ -102,7 +102,6 @@ func deal_initial_cards() -> void:
 	if _check_initial_blackjacks():
 		return
 	
-	# Start player turn
 	_start_player_turn()
 
 func _check_initial_blackjacks() -> bool:
@@ -211,7 +210,6 @@ func double_down() -> Dictionary:
 	if not GameManager.can_double_down():
 		return {}
 	
-	# Double the bet
 	GameManager.double_bet()
 	current_hand.is_doubled = true
 	
