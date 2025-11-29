@@ -1,6 +1,6 @@
 # Pixel Blackjack
 
-A complete pixelated blackjack game built with Godot 4.5.
+A pixelated blackjack game built with Godot 4.5.
 
 ### Standard Blackjack
 - Beat the dealer by getting closer to 21 without going over
